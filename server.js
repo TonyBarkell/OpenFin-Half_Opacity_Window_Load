@@ -4,6 +4,7 @@ var express = require('express');
 var path = require('path');
 var app = express();
 var target;
+var serverPort;
 
 app.use(express.static(__dirname + '/public'));
 
@@ -14,6 +15,7 @@ portfinder.getPortPromise().then((port) => {
         console.log("Server started at: " + target);
         openfinLauncher.launch({manifestUrl: target + "/app.json?manifest=" + encodeURI(JSON.stringify(buildManifest()))});
     });
+    console.log("Port: " + serverPort)
     
 }).catch((err) => {
     console.log("Unable to discover a free port: " + err);
@@ -32,6 +34,12 @@ app.get('/index.html', (req, res) => {
     index = path.resolve("./public/app/index.html");
     res.sendFile(index);
 });
+
+app.get('/child.html', (req, res) => {
+    index = path.resolve("./public/app/child.html");
+    res.sendFile(index);
+});
+
 
 app.get('/favicon.ico', (req, res) => {
     icon = path.resolve("./public/app/favicon.ico");
